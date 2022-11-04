@@ -37,6 +37,8 @@ Stefan Ninic
 Kaan Yigit
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Final Project Proposal
+
 ## Leading Question 
 
 For our final project we will use the OpenFlights dataset to see how people can be better connected using planes. We will find the most optimal path between the five best vacation spots according to US News (https://travel.usnews.com/rankings/worlds-best-vacations/) . These vacation spots include South Island, Paris, Maui, Bora Bora, Tahiti. In addition, we plan to calculate the most important airports and which airports are used the most. Using algorithms such as BFS search, DFS search, and AVL trees, we will create a website that is able to calculate the shortest path between the locations stated above, and also calculate which airports are considered the most important in the world currently.
@@ -50,6 +52,8 @@ Each airport and route will be stored in a graph. We will have each airport as a
 To complete our algorithms, our first step is to create a graph with the airports in the data set and have an array of all the possible routes between them. This is important as we will have all the data possibly needed to complete the project stored in this graph. An important algorithm that is imperative for us to use to complete our tasks is Djikstra’s algorithm. Djikstra’s algorithm is an algorithm used in graphs to find the shortest path between nodes, and the use of this algorithm will be implemented when finding the shortest route between the 5 best vacation spots. A BFS traversal will also be important for us to use, as it will provide us with an algorithm that can traverse the graph and visit all the airports stored. This is how we will create the original graph with the airports, as stated above. Lastly, we are looking into the use of AVL trees or Binary search trees to come up with a way to store the possible paths between nodes. Using these structures will provide us with a way to store these paths, particularly in the form of an adjacency matrix. In addition, we can use the data stored in this adjacency matrix to calculate the most important/visited airports.
 
 We can find the shortest path between any two airports by using Djikstra’s shortest path algorithm. Additionally, the project will require us to pass over multiple airports at a time, meaning we would use the Landmark Path algorithm to solve this task. Both algorithms would allow us to find the shortest path, however, the Landmark Path will be useful in finding the shortest path that includes certain airports that we may want to pass through. Ultimately, both algorithms will be used to create effective vacation spot routes for users. Additionally, we are going to use our Page Rank algorithm to map the top airports around the world to create a more useful UI for the user. To do this, we would need a node from the airport graph we created and a range of airports we want to create our adjacency matrix. Then we can figure out the top airports based on the calculated eigenvalues of our adjacency matrix.
+
+We expect the Big O to be around O(V^2) (V is the number of verticies in our graph) because the most complex algorithm is Djikstra's shortest path.
 
 ## Timeline
 
