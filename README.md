@@ -1,4 +1,4 @@
-# Team Contract & Final Project Proposal
+# Team Contract
 
 ## Communication
 1. **Team Meetings** 
