@@ -36,6 +36,9 @@ Group Members: Drew Patel, Pranav Penaganti, Stefan Ninic, Kaan Yigit
 ## Signatures
 
 Drew Patel
+
 Pranav Penaganti
+
 Stefan Ninic
+
 Kaan Yigit
