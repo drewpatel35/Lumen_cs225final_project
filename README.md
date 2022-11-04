@@ -1,9 +1,5 @@
 # Team Contract
 
-Group Members: Drew Patel, Pranav Penaganti, Stefan Ninic, Kaan Yigit
-
-# Team Contract
-
 ## Communication
 1. **Team Meetings** 
 
