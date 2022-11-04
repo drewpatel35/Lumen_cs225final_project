@@ -1,7 +1,4 @@
-# Lumen_cs225final_project
-CS225 Final Project Repo
-
-Group Name: Lumen
+# Team Contract
 
 Group Members: Drew Patel, Pranav Penaganti, Stefan Ninic, Kaan Yigit
 
