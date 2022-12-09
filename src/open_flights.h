@@ -122,3 +122,16 @@ class AirportMap {
         size_t numAirports = 0;
         
 };
+
+class PriorityQueue {
+    public:
+        PriorityQueue() = default;
+        void push(pair<string, double> element);
+        pair<string, double> front();
+        void pop();
+        bool empty() {return q_.empty(); };
+
+    private:
+        vector<pair<string, double>> q_;
+
+};

@@ -97,27 +97,27 @@ vector<string> AirportMap::bfsShortestPath(const string& start, const string& de
 
 vector<string> AirportMap::djikstrasShortestPath(const string& start,const string& dest, double& distance) {
     std::unordered_set<string> seen;
-    std::queue<string> next;
+    PriorityQueue next;
     std::map<string, double> dist;
     std::map<string, string> par;
     distance = 0;
     if (!VertexInGraph(start) || !VertexInGraph(dest)) {
         return {"-1"};
     }
-    next.push(start);
+    next.push({start, 0});
     seen.insert(start);
     dist.insert({start, 0});
     par.insert({start, "-1"});
     while (!next.empty()) {
-        string n = next.front();
+        pair<string, double> n = next.front();
         next.pop();
-        if (!VertexInGraph(n)) {
+        if (!VertexInGraph(n.first)) {
             return{"-1"};
         }
-        if (n == dest) {
+        if (n.first == dest) {
             vector<string> ret = {};
-            string val = n;
-            distance = dist[n];
+            string val = n.first;
+            distance = dist[n.first];
             while (val != "-1") {
                 ret.push_back(val);
                 val = par[val];
@@ -125,12 +125,13 @@ vector<string> AirportMap::djikstrasShortestPath(const string& start,const strin
             return reverse(ret);
         }
         
-        for (const adjacent& hey : adjacencyList.at(n)) {
+        for (const adjacent& hey : adjacencyList.at(n.first)) {
             if (seen.find(hey.code) == seen.end()) {
                 seen.insert(hey.code);
-                dist.insert({hey.code, dist.at(n) + findDistance(hey.code, n)});
-                par.insert({hey.code, n});
-                next.push(hey.code);
+                double distance = findDistance(hey.code, n.first);
+                dist.insert({hey.code, dist.at(n.first) + distance});
+                par.insert({hey.code, n.first});
+                next.push({hey.code, distance});
             }
         }
     }
@@ -218,4 +219,27 @@ void AirportMap::displayAdjList() {
         }
         cout << '\n';
     }
+}
+
+void PriorityQueue::push(pair<string, double> element) {
+    if (q_.empty()) {
+        q_.push_back(element);
+        return;
+    }
+    size_t i = 0;
+    while (i < q_.size() && q_[i].second < element.second) {
+        i++;
+    }
+    q_.insert(q_.begin() + i, element);
+
+}
+pair<string, double> PriorityQueue::front() {
+    if (q_.empty()) return {};
+
+    return q_.front();
+}
+void PriorityQueue::pop() {
+    if (q_.empty()) return;
+
+    q_.erase(q_.begin());
 }
