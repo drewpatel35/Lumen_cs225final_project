@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <sstream>
 #include <queue>
 #include <map>
 #include <set>
@@ -14,7 +13,7 @@
 #include <cmath>
 #include <cctype>
 #include <algorithm>
-#include <stdio.h>
+
 
 
 using namespace std;
@@ -46,28 +45,80 @@ struct adjacent {
 
 class AirportMap {
     public:
-        
+        /** 
+        * Default constructor for AirportMap
+        * Initializes map to empty
+        */
         AirportMap() = default;
+
+        /** 
+        * @param airports A string holding file name of open_flights data file for airports
+        * @param routes A string holding file name of open_flights data file for routes
+        * Parses through airport file and then route file to initialize airport dictionaries and adjacency list
+        * If a route includes airport not in airport file, data is ommitted
+        */
         AirportMap(const string& airports, const string& routes);
+
+        /**
+         * airportIndex Maps airport code to airport object holding more specific information
+        */
         unordered_map<string, airport> airportIndex;
+
+        /**
+         * adjacencyList Maps airport code to adjacent object holding airport code and distance from key airport
+        */
         unordered_map<string, vector<adjacent>> adjacencyList;
+
+        /**
+         * idx_ Vector of airport codes to aid in conversion to adjacency matrix
+        */
         vector<string> idx_;
+
+        /**
+         * Prints list of all airports with airport name followed by its respective code
+         * Print order is based on order of airports in idx_
+        */
         void printAirports();
+
+        /**
+         * Prints list of all airports with airport name followed by adjacent airports and their respective distance
+         * Print order is based on order of airports in adjacencyList
+        */
         void displayAdjList();
+
+        /** 
+        * @param start A string code for source airport
+        * @param dest A string code for destination airport
+        * @return A double for distance in miles or Km
+        */
         double findDistance(string start, string dest);
+
+        /** 
+        * @param start A string code for source airport
+        * @param dest A string code for destination airport
+        * @return A vector for shortest path of travel between start and destination
+        * Shortest path is based on number of connections
+        */
         vector<string> bfsShortestPath(const string& start, const string& dest);
+
+        /** 
+        * @param start A string code for source airport
+        * @param dest A string code for destination airport
+        * @param distance A double reference for the calculated distance to be stored
+        * @return A vector for shortest path of travel between start and destination
+        * Shortest path is based on distance of travel
+        */
         vector<string> djikstrasShortestPath(const string& start, const string& dest, double& distance);
-        vector<double> pagerank();
+
+
+        vector<string> pagerank();
     private:
-        
+        /** 
+        * @param code A string code for source airport
+        * @return A boolean for whether the source airport is include in the map
+        */
         bool VertexInGraph(string code);
+
         size_t numAirports = 0;
         
 };
-
-std::vector<std::string> Split(const std::string& str, char delimiter);
-long double distance(long double lat1, long double long1, long double lat2, long double long2);
-long double toRadians(const long double degree);
-vector<string> reverse(vector<string> s);
-void print_2d_vector(const vector< vector<double> > & matrix);
-vector<vector<double>> matrixMultiplication(const vector<vector<double>>& l, const vector<vector<double>>& r);
