@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <queue>
+#include <limits>
 #include <map>
 #include <set>
 #include <unordered_map>
@@ -130,6 +131,7 @@ class PriorityQueue {
         pair<string, double> front();
         void pop();
         bool empty() {return q_.empty(); };
+        void print();
 
     private:
         vector<pair<string, double>> q_;

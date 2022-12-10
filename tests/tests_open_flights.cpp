@@ -9,7 +9,7 @@
 
 #include "open_flights.h"
 
-TEST_CASE("Constructor airportIndex", "[airportIndex]") {
+TEST_CASE("Constructor airportIndex", "[Constructor][Airports]") {
   AirportMap test1("/workspaces/cs225/MPs/release-f22/Lumen_cs225final_project-main/entry/airportTest.dat", 
                      "/workspaces/cs225/MPs/release-f22/Lumen_cs225final_project-main/entry/routeTest.dat");
                      
@@ -36,7 +36,7 @@ TEST_CASE("Constructor airportIndex", "[airportIndex]") {
   REQUIRE(thu == test1.airportIndex["THU"]);
   REQUIRE(eve == test1.airportIndex["EVE"]);
 }
-TEST_CASE("Constructor adjecencyMatrix", "[airportIndex]") {
+TEST_CASE("Constructor adjecencyMatrix", "[Constructor][Routes]") {
   AirportMap test1("/workspaces/cs225/MPs/release-f22/Lumen_cs225final_project-main/entry/airportTest.dat", 
                      "/workspaces/cs225/MPs/release-f22/Lumen_cs225final_project-main/entry/routeTest.dat");
   vector<adjacent>  gka = {{"MAG",test1.findDistance("GKA", "MAG")},
@@ -67,4 +67,65 @@ TEST_CASE("Constructor adjecencyMatrix", "[airportIndex]") {
   REQUIRE(sfj == test1.adjacencyList["SFJ"]);
   REQUIRE(thu == test1.adjacencyList["THU"]);
   REQUIRE(eve == test1.adjacencyList["EVE"]);
+}
+
+TEST_CASE("BFS Shortest Path", "[BFS][ShortestPath]") {
+  AirportMap test1;
+  test1.airportIndex = {{"0", {0, "0", 0, 0, "0"}},
+                        {"1", {0, "1", 0, 0, "1"}}, 
+                        {"2", {0, "2", 0, 0, "2"}}, 
+                        {"3", {0, "3", 0, 0, "3"}},
+                        {"4", {0, "4", 0, 0, "4"}},
+                        {"5", {0, "5", 0, 0, "5"}},
+                        {"6", {0, "6", 0, 0, "6"}},
+                        {"7", {0, "7", 0, 0, "7"}}};
+
+  test1.idx_ = {"0", "1", "2", "3", "4", "5", "6", "7"};
+
+  test1.adjacencyList = {{"0", {{"1", 1}, {"3", 1}}},
+                         {"1", {{"0", 1}, {"2", 1}}},                           //  [1] --- [0]     [7] --- [6]
+                         {"2", {{"1", 1}}},                                     //   |       |    /  |    /  |
+                         {"3", {{"0", 1}, {"4", 1}, {"7", 1}}},                 //   |       |  /    |  /    |
+                         {"4", {{"3", 1}, {"5", 1}, {"6", 1}, {"7", 1}}},       //  [2]     [3] --- [4] --- [5]
+                         {"5", {{"4", 1}, {"6", 1}}},
+                         {"6", {{"4", 1}, {"5", 1}, {"7", 1}}},
+                         {"7", {{"3", 1}, {"4", 1}, {"6", 1}}}};
+
+  vector<string> t1 = {"2", "1", "0", "3"};
+  REQUIRE(test1.bfsShortestPath("2", "3") == t1);
+
+  vector<string> t2 = {"0", "3", "7"};
+  REQUIRE(test1.bfsShortestPath("0", "7") == t2);
+}
+
+TEST_CASE("Djikstras Shortest Path", "[Djikstras][ShortestPath]") {
+  AirportMap test1;
+  test1.airportIndex = {{"0", {0, "0", 0, 0, "0"}},
+                        {"1", {1, "1", 0, 0, "1"}}, 
+                        {"2", {2, "2", 0, 0, "2"}}, 
+                        {"3", {3, "3", 0, 0, "3"}},
+                        {"4", {4, "4", 0, 0, "4"}},
+                        {"5", {5, "5", 0, 0, "5"}},
+                        {"6", {6, "6", 0, 0, "6"}},
+                        {"7", {7, "7", 0, 0, "7"}}};
+
+  test1.idx_ = {"0", "1", "2", "3", "4", "5", "6", "7"};
+
+  test1.adjacencyList = {{"0", {{"1", 1}, {"3", 1}}},
+                         {"1", {{"0", 1}, {"2", 1}}},                           //  [1] --1- [0]      [7] --3- [6]
+                         {"2", {{"1", 1}}},                                     //   |        |      / |      / |
+                         {"3", {{"0", 1}, {"4", 1}, {"7", 3}}},                 //   1        1    3   1    1   1
+                         {"4", {{"3", 1}, {"5", 4}, {"6", 1}, {"7", 1}}},       //   |        |  /     |  /     |
+                         {"5", {{"4", 4}, {"6", 1}}},                           //  [2]      [3] --1- [4] --4- [5]
+                         {"6", {{"4", 1}, {"5", 1}, {"7", 3}}},
+                         {"7", {{"3", 3}, {"4", 1}, {"6", 3}}}};
+  double dist1 = 0;                       
+  vector<string> t1 = {"2", "1", "0", "3", "4", "7"};
+  REQUIRE(test1.djikstrasShortestPath("2", "7", dist1) == t1);
+  REQUIRE(dist1 == 5);
+
+  double dist2 = 0; 
+  vector<string> t2 = {"3", "4", "6", "5"};
+  REQUIRE(test1.djikstrasShortestPath("3", "5", dist2) == t2);
+  REQUIRE(dist2 == 3);
 }

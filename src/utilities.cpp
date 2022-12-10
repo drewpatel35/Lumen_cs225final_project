@@ -89,3 +89,21 @@ void print_2d_vector(const vector< vector<double> > & a)
     }
 }
 
+vector<vector<double>> matrixMultiplication(const vector<vector<double>>& l, const vector<vector<double>>& r) {
+    
+    size_t r1 = l.size(), c1 = l[0].size(), r2 = r.size(), c2 = r[0].size();
+    // If column of first matrix in not equal to row of second matrix,
+    // ask the user to enter the size of matrix again.
+    while (c1!=r2) {
+        std::cout << "Error! column of first matrix not equal to row of second.";
+        return {{-1.0}};
+    }
+    vector<vector<double>> ret(r1, vector<double>(c2, 0.0));
+    // Multiplying matrix a and b and storing in array mult.
+    for(size_t i = 0; i < r1; ++i)
+        for(size_t j = 0; j < c2; ++j)
+            for(size_t k = 0; k < c1; ++k) {
+                ret[i][j] += l[i][k] * r[k][j];
+            }
+    return ret;
+}

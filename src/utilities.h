@@ -4,6 +4,7 @@
 #include <string>
 #include <stdio.h>
 #include <vector>
+#include <iostream>
 
 /** 
  * Splits string into vector of strings using given delimiter

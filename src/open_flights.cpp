@@ -28,12 +28,10 @@ AirportMap::AirportMap(const string& airports, const string& routes)
             temp.latitude = stod(str.at(6));
             temp.longitude = stod(str.at(7));
         }
-        if (country == "United States") {
-            idx_.push_back(temp.code);
-            adjacencyList.insert({temp.code, {}});
-            airportIndex.insert({temp.code, temp});
-            numAirports++; 
-        }
+        idx_.push_back(temp.code);
+        adjacencyList.insert({temp.code, {}});
+        airportIndex.insert({temp.code, temp});
+        numAirports++; 
         
     }
     ap.close();
@@ -98,42 +96,41 @@ vector<string> AirportMap::bfsShortestPath(const string& start, const string& de
 vector<string> AirportMap::djikstrasShortestPath(const string& start,const string& dest, double& distance) {
     std::unordered_set<string> seen;
     PriorityQueue next;
-    std::map<string, double> dist;
+    vector<double> dist(idx_.size(), std::numeric_limits<int>::max());
     std::map<string, string> par;
-    distance = 0;
     if (!VertexInGraph(start) || !VertexInGraph(dest)) {
         return {"-1"};
     }
     next.push({start, 0});
     seen.insert(start);
-    dist.insert({start, 0});
+    dist[airportIndex[start].index] = 0;
     par.insert({start, "-1"});
     while (!next.empty()) {
         pair<string, double> n = next.front();
         next.pop();
         if (!VertexInGraph(n.first)) {
-            return{"-1"};
+            return{"-1 gay"};
         }
         if (n.first == dest) {
-            vector<string> ret = {};
+            vector<string> ret;
             string val = n.first;
-            distance = dist[n.first];
+            distance = dist[airportIndex[n.first].index];
             while (val != "-1") {
                 ret.push_back(val);
                 val = par[val];
             }
             return reverse(ret);
         }
-        
         for (const adjacent& hey : adjacencyList.at(n.first)) {
             if (seen.find(hey.code) == seen.end()) {
-                seen.insert(hey.code);
-                double distance = findDistance(hey.code, n.first);
-                dist.insert({hey.code, dist.at(n.first) + distance});
-                par.insert({hey.code, n.first});
-                next.push({hey.code, distance});
+                if (dist[airportIndex[hey.code].index] > dist[airportIndex[n.first].index] + hey.distance) {
+                    dist[airportIndex[hey.code].index] = dist[airportIndex[n.first].index] + hey.distance;
+                    par[hey.code] = n.first;
+                }
+                next.push({hey.code, dist[airportIndex[hey.code].index]});
             }
         }
+        seen.insert(n.first);
     }
     return {"-1"};
 }
@@ -174,24 +171,6 @@ vector<string> AirportMap::pagerank() {
     return ret;
 }
 
-vector<vector<double>> matrixMultiplication(const vector<vector<double>>& l, const vector<vector<double>>& r) {
-    
-    size_t r1 = l.size(), c1 = l[0].size(), r2 = r.size(), c2 = r[0].size();
-    // If column of first matrix in not equal to row of second matrix,
-    // ask the user to enter the size of matrix again.
-    while (c1!=r2) {
-        cout << "Error! column of first matrix not equal to row of second.";
-        return {{-1.0}};
-    }
-    vector<vector<double>> ret(r1, vector<double>(c2, 0.0));
-    // Multiplying matrix a and b and storing in array mult.
-    for(size_t i = 0; i < r1; ++i)
-        for(size_t j = 0; j < c2; ++j)
-            for(size_t k = 0; k < c1; ++k) {
-                ret[i][j] += l[i][k] * r[k][j];
-            }
-    return ret;
-}
 
 bool AirportMap::VertexInGraph(string code) {
     if (airportIndex.find(code) == airportIndex.end()) {
@@ -220,6 +199,10 @@ void AirportMap::displayAdjList() {
         cout << '\n';
     }
 }
+// bool sortbysec(const pair<string, double> &a,
+//               const pair<string, double> &b) {
+//     return (a.second < b.second);
+// }
 
 void PriorityQueue::push(pair<string, double> element) {
     if (q_.empty()) {
@@ -231,7 +214,6 @@ void PriorityQueue::push(pair<string, double> element) {
         i++;
     }
     q_.insert(q_.begin() + i, element);
-
 }
 pair<string, double> PriorityQueue::front() {
     if (q_.empty()) return {};
@@ -242,4 +224,12 @@ void PriorityQueue::pop() {
     if (q_.empty()) return;
 
     q_.erase(q_.begin());
+}
+
+void PriorityQueue::print() {
+    cout << "[ ";
+    for (pair<string, double> pr : q_) {
+        cout << pr.first  << ":" << pr.second << " ";
+    }
+    cout << "] \n \n";
 }
