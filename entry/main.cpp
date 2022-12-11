@@ -2,9 +2,11 @@
 
 int contains(std::vector<std::string> vct, std::string str) {
     int c = 0;
-    for (std::string s : vct)
+    for (std::string s : vct) {
         if (s == str) 
             return c;
+        c++;
+    }
     return -1;
 }
 
@@ -28,7 +30,7 @@ int main() {
         int codeIdx = contains(destinations, str);
         std::cout << '\n' << "From Chicago to " << str << " the shortest flight in terms of connections is: " << '\n';
 
-        std::vector<std::string> bfs = test.bfsShortestPath("ORD", codes[codeIdx]);
+        std::vector<std::string> bfs = test.bfsShortestPath("ORD", codes[contains(destinations, str)]);
         for (size_t i=0;i<bfs.size();i++) {
             std::cout << test.airportIndex[bfs[i]].name;
             if (i != bfs.size() - 1) std::cout << " ->> ";
@@ -38,7 +40,7 @@ int main() {
         std::cout << '\n' << "The shortest flight in terms of distance is: " << '\n';
 
         double dist = 0;
-        std::vector<std::string> djik = test.djikstrasShortestPath("ORD", codes[codeIdx], dist);
+        std::vector<std::string> djik = test.djikstrasShortestPath("ORD", codes[contains(destinations, str)], dist);
         for (size_t i=0;i<djik.size();i++) {
             std::cout << test.airportIndex[djik[i]].name;
             if (i != djik.size() - 1) std::cout << " ->> ";
