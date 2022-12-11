@@ -15,8 +15,8 @@ AirportMap::AirportMap(const string& airports, const string& routes)
         vector<string> str = Split(line, ',');
         temp.index = numAirports;
         string country;
-        if (str.size() > 14) {
-            temp.name = str.at(1).substr(1, str.at(1).size()-1);
+        if (str.size() > 14) {                                          // Checking for errors in parsing based on size
+            temp.name = str.at(1).substr(1, str.at(1).size()-1);        
             country = str.at(4).substr(1, str.at(4).size()-2);
             temp.code = str.at(5).substr(1, str.at(5).size()-2);
             temp.latitude = stod(str.at(7));
@@ -28,15 +28,15 @@ AirportMap::AirportMap(const string& airports, const string& routes)
             temp.latitude = stod(str.at(6));
             temp.longitude = stod(str.at(7));
         }
-        idx_.push_back(temp.code);
-        adjacencyList.insert({temp.code, {}});
-        airportIndex.insert({temp.code, temp});
-        numAirports++; 
-        
+        idx_.push_back(temp.code);                                      // Filling idx_, airportIndex, and numairports while
+        adjacencyList[temp.code] = {};                                  // initializing the adjacencyList
+        if (airportIndex.find(temp.code) == airportIndex.end()) {
+            airportIndex[temp.code] = temp;
+            numAirports++; 
+        }
     }
     ap.close();
     line.clear();
-
     std::ifstream rt(routes);
     if(!rt.is_open()) {
         throw std::runtime_error("Could not open file");
@@ -45,15 +45,13 @@ AirportMap::AirportMap(const string& airports, const string& routes)
         vector<string> str = Split(line, ',');
         if (str.size() == 9){
             string source = str[2];
-            // std::cout << source;
-            adjacent dest = {str[4], findDistance(source, str[4])};
-            // std::cout << dest.code;
-            //if (adjacencyList.find(source) != adjacencyList.end())
-            adjacencyList[source].push_back(dest);
+            if (VertexInGraph(str[4]) && VertexInGraph(source)) {
+                adjacent dest = {str[4], findDistance(source, str[4])};      // Filling adjacencyList
+                adjacencyList[source].push_back(dest);
+            }
         }
     }
     rt.close();
-
 }
 
 vector<string> AirportMap::bfsShortestPath(const string& start, const string& dest) {
@@ -109,7 +107,7 @@ vector<string> AirportMap::djikstrasShortestPath(const string& start,const strin
         pair<string, double> n = next.front();
         next.pop();
         if (!VertexInGraph(n.first)) {
-            return{"-1 gay"};
+            return{"-1"};
         }
         if (n.first == dest) {
             vector<string> ret;
@@ -126,8 +124,9 @@ vector<string> AirportMap::djikstrasShortestPath(const string& start,const strin
                 if (dist[airportIndex[hey.code].index] > dist[airportIndex[n.first].index] + hey.distance) {
                     dist[airportIndex[hey.code].index] = dist[airportIndex[n.first].index] + hey.distance;
                     par[hey.code] = n.first;
+                    next.push({hey.code, dist[airportIndex[hey.code].index]});
                 }
-                next.push({hey.code, dist[airportIndex[hey.code].index]});
+                
             }
         }
         seen.insert(n.first);
@@ -136,36 +135,42 @@ vector<string> AirportMap::djikstrasShortestPath(const string& start,const strin
 }
 
 vector<string> AirportMap::pagerank() {
+    numAirports = airportIndex.size();
     vector<vector<double>> matrix(numAirports, vector<double>(numAirports, 0.0));
     for (pair<string, airport> pr : airportIndex) {
         vector<adjacent> adj = adjacencyList[pr.first];
         int idx1 = pr.second.index;
         if (adj.empty()) {
-            for (size_t i = 0; i<numAirports; i++) {
-                matrix[i][idx1] = 1.0/numAirports;
+            for (size_t i = 0; i<numAirports; i++) {                // If column of adjacency matrix is empty,
+                matrix[i][idx1] = 1.0/numAirports;                  // fill all values with 1/numAiports
             }
         }
         for (adjacent a : adj) {
-            int idx2 = airportIndex[a.code].index;
+            int idx2 = airportIndex[a.code].index;                  // Set adjacency weights based on number of connecting aiports
             matrix[idx2][idx1] = 1.0/adj.size();
         }
     }
     for (size_t i = 0; i<numAirports;i++) {
         for (size_t j = 0;j<numAirports;j++) {
-            matrix[i][j] = (0.85 * matrix[i][j]) + (.15 / numAirports);
+            matrix[i][j] = (0.85 * matrix[i][j]) + (.15 / numAirports);     // Apply google matrix with dampening factor
         }
     }
     vector<vector<double>> steadystate(numAirports, vector<double>(1, 0.0));
     steadystate[0][0] = 1.0;
-    for (size_t i=0;i<200;i++)
-        steadystate = matrixMultiplication(matrix, steadystate);
+    for (size_t i=0;i<11;i++) {
+        cout << "... ";
+        
+        steadystate = matrixMultiplication(matrix, steadystate);            // Calculate steady state to see most important aiports
+    }
+    cout << '\n';
     vector<pair<double, string>> temp(numAirports, {0.0, ""});
     for (size_t i = 0;i<numAirports;i++) {
         temp[i] = {steadystate[i][0], idx_[i]};
     }
+    // Sort descending based of first part of pair
     sort(temp.rbegin(), temp.rend());
     vector<string> ret;
-    for (size_t i = 0;i<5;i++) {
+    for (size_t i = 0;i<5 && i < numAirports;i++) {                         // Push top 5 or if there are less airports
         ret.push_back(temp[i].second);
     }
     return ret;

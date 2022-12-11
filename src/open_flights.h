@@ -111,7 +111,10 @@ class AirportMap {
         */
         vector<string> djikstrasShortestPath(const string& start, const string& dest, double& distance);
 
-
+        /**
+         * @return A vector of the top 5 or less airports using their codes
+         * Calculates ranking based on Google Pagerank algorithm and improved matrix formula
+        */
         vector<string> pagerank();
     private:
         /** 

@@ -129,3 +129,42 @@ TEST_CASE("Djikstras Shortest Path", "[Djikstras][ShortestPath]") {
   REQUIRE(test1.djikstrasShortestPath("3", "5", dist2) == t2);
   REQUIRE(dist2 == 3);
 }
+
+TEST_CASE("Short PageRank", "[Pagerank]") {
+  AirportMap test1;
+  test1.airportIndex = {{"0", {0, "0", 0, 0, "0"}},
+                        {"1", {1, "1", 0, 0, "1"}}, 
+                        {"2", {2, "2", 0, 0, "2"}}, 
+                        {"3", {3, "3", 0, 0, "3"}},};
+
+  test1.idx_ = {"0", "1", "2", "3"};
+                                                                  //    [0] ---> [1]
+  test1.adjacencyList = {{"0", {{"1", 1}, {"2", 1}}},             //     ^     /
+                         {"1", {{"2", 1}}},                       //     |   /
+                         {"2", {{"0", 1}}},                       //     v v
+                         {"3", {{"2", 1}}}};                      //    [2] <--- [3]                       
+  vector<string> t1 = {"2", "0", "1", "3"};
+  REQUIRE(test1.pagerank() == t1);
+}
+
+TEST_CASE("Medium PageRank", "[Pagerank]") {
+  AirportMap test1;
+  test1.airportIndex = {{"0", {0, "0", 0, 0, "0"}},
+                        {"1", {1, "1", 0, 0, "1"}}, 
+                        {"2", {2, "2", 0, 0, "2"}}, 
+                        {"3", {3, "3", 0, 0, "3"}},
+                        {"4", {4, "4", 0, 0, "4"}},
+                        {"5", {5, "5", 0, 0, "5"}}};
+
+  test1.idx_ = {"0", "1", "2", "3", "4", "5"};
+
+  test1.adjacencyList = {{"0", {{"1", 1}}},
+                         {"1", {{"2", 1}}},                    // [0]--->[1]--->[2]
+                         {"2", {{"4", 1}}},                    //         ^      |
+                         {"3", {{"1", 1}}},                    //         |      v
+                         {"4", {{"3", 1}, {"5", 1}}},          //        [3]<---[4]--->[5]
+                         {"5", {}}};                  
+  vector<string> t1 = { "4", "2", "1", "5", "3"};
+  REQUIRE(test1.pagerank() == t1);
+
+}
