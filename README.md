@@ -9,9 +9,7 @@
  
  The written report: Lumen_cs225final_project/results.md/ 
  
- The presentation video: https://www.youtube.com/watch?v=9BV_rx2umPE
- 
-
+ The presentation video: https://www.youtube.com/watch?v=LsKwNEGi-R4
 
     
 ## Setup Instructions
