@@ -1,7 +1,7 @@
 ## Github Organization
 **File Locations** 
 
- Code: Files for the algorthyms are at Lumen_cs225final_project/src/ 
+ Code: Files for the algorithms are at Lumen_cs225final_project/src/ 
  
  Tests: The test files are located at Lumen_cs225final_project/tests/  
  
@@ -27,3 +27,6 @@ $ cd build
 $ cmake ..
 
 $ make
+
+## Using The Executable
+
