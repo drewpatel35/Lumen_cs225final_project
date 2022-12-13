@@ -204,10 +204,7 @@ void AirportMap::displayAdjList() {
         cout << '\n';
     }
 }
-// bool sortbysec(const pair<string, double> &a,
-//               const pair<string, double> &b) {
-//     return (a.second < b.second);
-// }
+
 
 void PriorityQueue::push(pair<string, double> element) {
     if (q_.empty()) {
