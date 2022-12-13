@@ -15,4 +15,15 @@
 
     
 ## Running Instructions
+
+Put the Lumen_cs225final_project folder in to your cs225 devolpment folder
+
+Open the terminal on the root directory and type following commands
     
+$ mkdir build
+
+$ cd build
+
+$ cmake ..
+
+$ make
