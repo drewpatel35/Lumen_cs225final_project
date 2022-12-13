@@ -6,5 +6,4 @@ Our leading question was to find the shortest travel distance and least connecte
 
 We did answer this problem by first passing the CSV in to the program and parsing it to store in a graph structure. We have implemented required structs and maps for an adjacency list and indexing helper to enable graph functionality. Furthermore, to search the graph to find the shortest travel distance and least connected travel between Chicago and the five best vacation spots we have implemented BFS and Dijkstra's algorithms.
 
-
-*What did you discover?
+We have discovered that most of the shortest travel routes will not be different whether they are based on connections or distance. Also it has been revealed that airport location rather than the Airport code as key for graph would allow for user to pick route from any two locations. Furthermore we have discovered that calculation of travel distance is not important to flyers alone. It should be rather used to convey other travel factors such as time or C02 emissions.
