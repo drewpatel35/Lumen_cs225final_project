@@ -30,3 +30,10 @@ $ make
 
 ## Using The Executable
 
+Chose one of the South Island, Paris, Maui, Bora Bora, or Tahiti destinations and type it into terminal when prompted.
+
+The executable will output the shortest flight in terms of distance and the least connected destination.
+
+
+
+
