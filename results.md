@@ -1,5 +1,14 @@
 ## The output and correctness of each algorithm
 The output and correctness of each algorithm – You should summarize, visualize, or highlight some part of the full-scale run of each algorithm. Additionally, the report should briefly describe what tests you performed to confirm that each algorithm was working as intended.
+### BFS/Dijkstra's
+They do keep track of distance map/vector and previous map. BFS does push adjacent nodes to queue if not seen before. Dijkstra's does push adjacent nodes to priority queue if not visited before and distance vector is updated
+
+
+### PageRank
+It was implemented by converting adjacency list to adjacency matrix. Then applying Google’s formula for improved importance matrix. After formula was applied the steady-state of the probability matrix was calculated.
+
+
+
 
 ## The answer to your leading question
 Our leading question was to find the shortest travel distance and least connected travel between Chicago and the five best vacation spots. Also a side goal was set to calculate the largest airports based on number of connections.
