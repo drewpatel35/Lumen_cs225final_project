@@ -14,7 +14,7 @@
 
 
     
-## Running Instructions
+## Setup Instructions
 
 Put the Lumen_cs225final_project folder in to your cs225 devolpment folder
 
